@@ -351,7 +351,7 @@
 
     <span class="c1">#: DEFAULT bitmask identifies all cadences which are definitely useless.</span>
     <span class="n">DEFAULT_BITMASK</span> <span class="o">=</span> <span class="p">(</span><span class="n">AttitudeTweak</span> <span class="o">|</span> <span class="n">SafeMode</span> <span class="o">|</span> <span class="n">CoarsePoint</span> <span class="o">|</span> <span class="n">EarthPoint</span> <span class="o">|</span>
-                       <span class="n">Desat</span> <span class="o">|</span> <span class="n">ManualExclude</span><span class="p">)</span>
+                       <span class="n">Desat</span> <span class="o">|</span> <span class="n">ManualExclude</span> <span class="o">|</span> <span class="n">ImpulsiveOutlier</span><span class="p">)</span>
     <span class="c1">#: HARD bitmask is conservative and may identify cadences which are useful.</span>
     <span class="n">HARD_BITMASK</span> <span class="o">=</span> <span class="p">(</span><span class="n">DEFAULT_BITMASK</span> <span class="o">|</span> <span class="n">ApertureCosmic</span> <span class="o">|</span>
                     <span class="n">CollateralCosmic</span> <span class="o">|</span> <span class="n">Straylight</span><span class="p">)</span>
@@ -565,7 +565,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">PercentileInterval</span><span class="p">(</span><span class="mf">95.</span><span class="p">)</span><span class="o">.</span><span class="n">get_limits</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">PercentileInterval</span><span class="p">(</span><span class="mf">95.</span><span class="p">)</span><span class="o">.</span><span class="n">get_limits</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="n">image</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
 
     <span class="n">norm</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

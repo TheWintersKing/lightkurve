@@ -210,7 +210,7 @@
 <h1>TessTargetPixelFile<a class="headerlink" href="#tesstargetpixelfile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="lightkurve.targetpixelfile.TessTargetPixelFile">
-<em class="property">class </em><code class="descclassname">lightkurve.targetpixelfile.</code><code class="descname">TessTargetPixelFile</code><span class="sig-paren">(</span><em>path</em>, <em>quality_bitmask=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightkurve/targetpixelfile.html#TessTargetPixelFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightkurve.targetpixelfile.TessTargetPixelFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">lightkurve.targetpixelfile.</code><code class="descname">TessTargetPixelFile</code><span class="sig-paren">(</span><em>path</em>, <em>quality_bitmask='default'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/lightkurve/targetpixelfile.html#TessTargetPixelFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lightkurve.targetpixelfile.TessTargetPixelFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">lightkurve.targetpixelfile.TargetPixelFile</span></code></p>
 <p>Defines a TargetPixelFile class for the TESS Mission.
 Enables extraction of raw lightcurves and centroid positions.</p>
@@ -280,7 +280,7 @@ Enables extraction of raw lightcurves and centroid positions.</p>
 <td>Returns a boolean mask flagging cadences whose time is <cite>nan</cite>.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#lightkurve.targetpixelfile.TessTargetPixelFile.pipeline_mask" title="lightkurve.targetpixelfile.TessTargetPixelFile.pipeline_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pipeline_mask</span></code></a></td>
-<td>Returns the aperture mask used by the pipeline</td>
+<td>Returns the optimal aperture mask used by the TESS pipeline.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#lightkurve.targetpixelfile.TessTargetPixelFile.pos_corr1" title="lightkurve.targetpixelfile.TessTargetPixelFile.pos_corr1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pos_corr1</span></code></a></td>
 <td>Returns the column position correction.</td>
@@ -426,7 +426,9 @@ Enables extraction of raw lightcurves and centroid positions.</p>
 <dl class="attribute">
 <dt id="lightkurve.targetpixelfile.TessTargetPixelFile.pipeline_mask">
 <code class="descname">pipeline_mask</code><a class="headerlink" href="#lightkurve.targetpixelfile.TessTargetPixelFile.pipeline_mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the aperture mask used by the pipeline</p>
+<dd><p>Returns the optimal aperture mask used by the TESS pipeline.</p>
+<p>For details on how the mask is stored in a TPF, see Section 6 of the
+Data Products documentation (EXP-TESS-ARC-ICD-TM-0014.pdf).</p>
 </dd></dl>
 
 <dl class="attribute">

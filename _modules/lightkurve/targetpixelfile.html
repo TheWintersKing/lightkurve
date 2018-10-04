@@ -1360,7 +1360,7 @@
 <span class="sd">    kwargs : dict</span>
 <span class="sd">        Keyword arguments passed to `astropy.io.fits.open()`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quality_bitmask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">quality_bitmask</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TessTargetPixelFile</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                                   <span class="n">quality_bitmask</span><span class="o">=</span><span class="n">quality_bitmask</span><span class="p">,</span>
                                                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1378,6 +1378,20 @@
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span><span class="p">(</span><span class="s1">&#39;TessTargetPixelFile(TICID: </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targetid</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pipeline_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the optimal aperture mask used by the TESS pipeline.</span>
+
+<span class="sd">        For details on how the mask is stored in a TPF, see Section 6 of the</span>
+<span class="sd">        Data Products documentation (EXP-TESS-ARC-ICD-TM-0014.pdf).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">&amp;</span> <span class="mi">2</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">background_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the background mask used by the TESS pipeline.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">&amp;</span> <span class="mi">4</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
