@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to recover the first TESS planet candidate? &mdash; lightkurve 1.0b18 documentation</title>
+  <title>How to recover the first TESS planet candidate with Lightkurve? &mdash; lightkurve 1.0b19 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="How to use lightkurve for asteroseismology?" href="2.09-how-to-use-lightkurve-for-asteroseismology.html" />
+    <link rel="next" title="How to use lightkurve for asteroseismology" href="2.09-how-to-use-lightkurve-for-asteroseismology.html" />
     <link rel="prev" title="How to recover a known planet in Kepler data?" href="2.02-recover-a-planet.html" /> 
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b18
+                1.0b19
               </div>
             
           
@@ -96,12 +96,12 @@
 <li class="toctree-l1"><a class="reference internal" href="section1.html">Introduction to lightkurve</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="section2.html">Science with lightkurve</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="2.02-recover-a-planet.html">How to recover a known planet in Kepler data?</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">How to recover the first TESS planet candidate?</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">How to recover the first TESS planet candidate with <em>Lightkurve</em>?</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Building-Light-Curves-from-TPFs">Building Light Curves from TPFs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Comparing-two-apertures">Comparing two apertures</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="2.09-how-to-use-lightkurve-for-asteroseismology.html">How to use lightkurve for asteroseismology?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.09-how-to-use-lightkurve-for-asteroseismology.html">How to use lightkurve for asteroseismology</a></li>
 <li class="toctree-l2"><a class="reference internal" href="2.10-how-to-make-a-supernova-lightcurve.html">How to make a supernova lightcurve?</a></li>
 </ul>
 </li>
@@ -160,7 +160,7 @@
         
           <li><a href="section2.html">Science with lightkurve</a> &raquo;</li>
         
-      <li>How to recover the first TESS planet candidate?</li>
+      <li>How to recover the first TESS planet candidate with <em>Lightkurve</em>?</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -362,8 +362,8 @@ div.nboutput div.output_area.stderr {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<div class="section" id="How-to-recover-the-first-TESS-planet-candidate?">
-<h1>How to recover the first TESS planet candidate?<a class="headerlink" href="#How-to-recover-the-first-TESS-planet-candidate?" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="How-to-recover-the-first-TESS-planet-candidate-with-Lightkurve?">
+<h1>How to recover the first TESS planet candidate with <em>Lightkurve</em>?<a class="headerlink" href="#How-to-recover-the-first-TESS-planet-candidate-with-Lightkurve?" title="Permalink to this headline">¶</a></h1>
 <p>Recently, the first public pixel data from the TESS mission have become
 <a class="reference external" href="https://archive.stsci.edu/prepds/tess-data-alerts/">available from the data archive at
 MAST</a>. This
@@ -1091,7 +1091,7 @@ uncertainty of those points.</p>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">lc</span> <span class="o">=</span> <span class="n">tpf</span><span class="o">.</span><span class="n">to_lightcurve</span><span class="p">(</span><span class="n">aperture_mask</span><span class="o">=</span><span class="n">aperture_mask</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">window_length</span><span class="o">=</span><span class="mi">1001</span><span class="p">)</span>
-<span class="n">lc</span> <span class="o">=</span> <span class="n">lc</span><span class="p">[(</span><span class="n">flat_lc</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mi">1346</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">flat_lc</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mi">1350</span><span class="p">)]</span>
+<span class="n">lc</span> <span class="o">=</span> <span class="n">lc</span><span class="p">[(</span><span class="n">lc</span><span class="o">.</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mi">1346</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">lc</span><span class="o">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mi">1350</span><span class="p">)]</span>
 <span class="n">lc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mf">6.27</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span><span class="o">.</span><span class="n">bin</span><span class="p">(</span><span class="n">binsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
@@ -1158,7 +1158,7 @@ removal methods applied. We will explore those in a future tutorial!</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="2.09-how-to-use-lightkurve-for-asteroseismology.html" class="btn btn-neutral float-right" title="How to use lightkurve for asteroseismology?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="2.09-how-to-use-lightkurve-for-asteroseismology.html" class="btn btn-neutral float-right" title="How to use lightkurve for asteroseismology" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="2.02-recover-a-planet.html" class="btn btn-neutral" title="How to recover a known planet in Kepler data?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -1192,7 +1192,7 @@ removal methods applied. We will explore those in a future tutorial!</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b18',
+            VERSION:'1.0b19',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
