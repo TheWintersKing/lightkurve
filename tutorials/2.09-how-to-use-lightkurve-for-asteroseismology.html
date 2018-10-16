@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to use lightkurve for asteroseismology &mdash; lightkurve 1.0b19 documentation</title>
+  <title>How to use lightkurve for asteroseismology &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -112,6 +112,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -396,7 +397,7 @@ more about asteroseismology with giants in K2 in Stello et al 2015
 <a class="reference external" href="https://arxiv.org/pdf/1610.03060.pdf">here</a>.</p>
 <p>First we’ll use <code class="docutils literal notranslate"><span class="pre">from_archive</span></code> to download the Target Pixel File for
 the target.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
@@ -407,13 +408,21 @@ the target.</p>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Downloading URL https://mast.stsci.edu/api/v0/download/file?uri=mast:K2/url/missions/k2/target_pixel_files/c5/211400000/16000/ktwo211416749-c05_spd-targ.fits.gz to ./mastDownload/K2/ktwo211416749-c05_sc/ktwo211416749-c05_spd-targ.fits.gz ... [Done]
+</pre></div></div>
+</div>
 <p>Be aware that this is a <strong>short cadence</strong> light curve, which means that
 this dataset is much larger than others we’ve used in previous
 tutorials. If you’re rerunning this tutorial locally, it might take a
 few minutes to rerun the later steps.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [4]:
+<span></span>In [3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -423,7 +432,7 @@ few minutes to rerun the later steps.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[4]:
+<span></span>Out[3]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -435,21 +444,11 @@ few minutes to rerun the later steps.</p>
 plotting in ‘log’ scale here so that we can see the wings of the PSF.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [5]:
+<span></span>In [4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="n">tpf</span><span class="o">.</span><span class="n">pipeline_mask</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[5]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c1f896438&gt;
+<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="n">tpf</span><span class="o">.</span><span class="n">pipeline_mask</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -457,7 +456,7 @@ plotting in ‘log’ scale here so that we can see the wings of the PSF.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_7_1.png" src="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_7_1.png" />
+<img alt="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_7_0.png" src="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_7_0.png" />
 </div>
 </div>
 <p>We can now create a <code class="docutils literal notranslate"><span class="pre">KeplerLightCurve</span></code> using Simple Aperture
@@ -468,7 +467,7 @@ using linear interpolation of the nearest neighbours. This creates an
 almost perfectly sampled time array with no gaps.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -480,21 +479,11 @@ almost perfectly sampled time array with no gaps.</p>
 <p>We can plot our light curve easily with the <code class="docutils literal notranslate"><span class="pre">plot</span></code> method.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[7]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c275fac50&gt;
+<span></span><span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -502,7 +491,7 @@ almost perfectly sampled time array with no gaps.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_11_1.png" src="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_11_1.png" />
+<img alt="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_11_0.png" src="../_images/tutorials_2.09-how-to-use-lightkurve-for-asteroseismology_11_0.png" />
 </div>
 </div>
 <p>Let’s take a look at the periodogram for this light curve. You can
@@ -513,11 +502,11 @@ units, depending on the range of frequencies you’re looking for. In
 asteroseismology we usually use <span class="math notranslate nohighlight">\(\mu Hz\)</span>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">p</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">periodogram</span><span class="p">(</span><span class="n">freq_unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">microHertz</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span></span><span class="n">p</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">to_periodogram</span><span class="p">(</span><span class="n">freq_unit</span><span class="o">=</span><span class="n">u</span><span class="o">.</span><span class="n">microHertz</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">min_frequency</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -525,7 +514,7 @@ asteroseismology we usually use <span class="math notranslate nohighlight">\(\mu
 the data. Let’s do that now!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -548,7 +537,7 @@ the data due to the K2 motion. We can see below when we plot the data in
 periodicity at ~ 6 hours.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -983,7 +972,7 @@ and aperture sizes, and combine datasets to increase signal to noise.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

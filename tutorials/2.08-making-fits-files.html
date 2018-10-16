@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to save a lightcurve in FITS format? &mdash; lightkurve 1.0b19 documentation</title>
+  <title>How to save a lightcurve in FITS format? &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -111,6 +111,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -394,12 +395,12 @@ required/suggested for your HLSP to be accepted.</p>
 flux from MAST, remove NaN values and clip out any outliers.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [2]:
+<span></span>In [4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">lc</span> <span class="o">=</span> <span class="n">lcf</span><span class="o">.</span><span class="n">PDCSAP_FLUX</span><span class="o">.</span><span class="n">remove_nans</span><span class="p">()</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">()</span>
-<span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">scatter</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -414,7 +415,7 @@ flux from MAST, remove NaN values and clip out any outliers.</p>
 called <em>output.fits</em>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [3]:
+<span></span>In [5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -425,7 +426,7 @@ called <em>output.fits</em>.</p>
 <p>Let’s take a look at the file and check that it behaved as we expect</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [4]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -437,11 +438,11 @@ called <em>output.fits</em>.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[4]:
+<span></span>Out[6]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>[&lt;astropy.io.fits.hdu.image.PrimaryHDU object at 0x7fdf49539eb8&gt;, &lt;astropy.io.fits.hdu.table.BinTableHDU object at 0x7fdf49448438&gt;]
+<span></span>[&lt;astropy.io.fits.hdu.image.PrimaryHDU object at 0x7f0fbf9a3fd0&gt;, &lt;astropy.io.fits.hdu.table.BinTableHDU object at 0x7f0fbf97de10&gt;]
 </pre></div>
 </div>
 </div>
@@ -449,7 +450,7 @@ called <em>output.fits</em>.</p>
 expect. Lets take a look at the header of the first extension.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [5]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -459,7 +460,7 @@ expect. Lets take a look at the header of the first extension.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[5]:
+<span></span>Out[7]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -471,7 +472,7 @@ NEXTEND =                    2 / number of standard extensions
 EXTNAME = &#39;PRIMARY &#39;           / name of extension
 EXTVER  =                    1 / extension version number (not format version)
 ORIGIN  = &#39;Unofficial data product&#39; / institution responsible for file
-DATE    = &#39;2018-06-12&#39;         / file creation date.
+DATE    = &#39;2018-10-10&#39;         / file creation date.
 CREATOR = &#39;lightkurve&#39;         / pipeline job and program used t
 TELESCOP= &#39;KEPLER  &#39;           / telescope
 INSTRUME= &#39;Kepler Photometer&#39;  / detector type
@@ -482,12 +483,12 @@ RADESYS = &#39;ICRS    &#39;           / reference frame of celestial coordinate
 RA_OBJ  =            291.03872 / [deg] right ascension
 DEC_OBJ =             36.59813 / [deg] declination
 EQUINOX =                 2000 / equinox of celestial coordinate system
-PROCVER = &#39;1.0b7   &#39;
+PROCVER = &#39;1.0b18  &#39;
 QUARTER =                    3
 MISSION = &#39;Kepler  &#39;
 DATE-OBS= &#39;2009-09-18T17:53:34.165&#39;
-CHECKSUM= &#39;QaoiTRnhQXnhQXnh&#39;   / HDU checksum updated 2018-06-12T21:10:10
-DATASUM = &#39;0       &#39;           / data unit checksum updated 2018-06-12T21:10:10
+CHECKSUM= &#39;QTnjSRngQRngQRng&#39;   / HDU checksum updated 2018-10-10T15:59:10
+DATASUM = &#39;0       &#39;           / data unit checksum updated 2018-10-10T15:59:10
 </pre></div>
 </div>
 </div>
@@ -495,7 +496,7 @@ DATASUM = &#39;0       &#39;           / data unit checksum updated 2018-06-12T2
 about the second extension?</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -505,7 +506,7 @@ about the second extension?</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[6]:
+<span></span>Out[8]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -529,8 +530,8 @@ TUNIT3  = &#39;counts  &#39;
 TTYPE4  = &#39;CADENCENO&#39;
 TFORM4  = &#39;J       &#39;
 EXTNAME = &#39;LIGHTCURVE&#39;
-CHECKSUM= &#39;5iaGAfX98faGAfW9&#39;   / HDU checksum updated 2018-06-12T21:10:10
-DATASUM = &#39;2444846209&#39;         / data unit checksum updated 2018-06-12T21:10:10
+CHECKSUM= &#39;3gaGAfU93fZEAfZ9&#39;   / HDU checksum updated 2018-10-10T15:59:10
+DATASUM = &#39;2444846209&#39;         / data unit checksum updated 2018-10-10T15:59:10
 </pre></div>
 </div>
 </div>
@@ -541,7 +542,7 @@ Let’s add some keywords to explain who made the data, and what our HLSP
 is.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -555,7 +556,7 @@ is.</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -565,7 +566,7 @@ is.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[8]:
+<span></span>Out[10]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -577,7 +578,7 @@ NEXTEND =                    2 / number of standard extensions
 EXTNAME = &#39;PRIMARY &#39;           / name of extension
 EXTVER  =                    1 / extension version number (not format version)
 ORIGIN  = &#39;Unofficial data product&#39; / institution responsible for file
-DATE    = &#39;2018-06-12&#39;         / file creation date.
+DATE    = &#39;2018-10-10&#39;         / file creation date.
 CREATOR = &#39;lightkurve&#39;         / pipeline job and program used t
 TELESCOP= &#39;KEPLER  &#39;           / telescope
 INSTRUME= &#39;Kepler Photometer&#39;  / detector type
@@ -588,15 +589,15 @@ RADESYS = &#39;ICRS    &#39;           / reference frame of celestial coordinate
 RA_OBJ  =            291.03872 / [deg] right ascension
 DEC_OBJ =             36.59813 / [deg] declination
 EQUINOX =                 2000 / equinox of celestial coordinate system
-PROCVER = &#39;1.0b7   &#39;
+PROCVER = &#39;1.0b18  &#39;
 QUARTER =                    3
 HLSPLEAD= &#39;Kepler/K2 GO office&#39;
 HLSPNAME= &#39;TUTORIAL&#39;
 CITATION= &#39;HEDGES2018&#39;
 MISSION = &#39;Kepler  &#39;
 DATE-OBS= &#39;2009-09-18T17:53:34.165&#39;
-CHECKSUM= &#39;mEIAoDI5mDIAmDI5&#39;   / HDU checksum updated 2018-06-12T21:10:11
-DATASUM = &#39;0       &#39;           / data unit checksum updated 2018-06-12T21:10:11
+CHECKSUM= &#39;mAKAn7H1mAH8m7H8&#39;   / HDU checksum updated 2018-10-10T15:59:19
+DATASUM = &#39;0       &#39;           / data unit checksum updated 2018-10-10T15:59:19
 </pre></div>
 </div>
 </div>
@@ -605,7 +606,7 @@ we want to add more data columns to our fits file? We can simply add
 this in the same way. Let’s add the data quality to our fits file.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -620,7 +621,7 @@ this in the same way. Let’s add the data quality to our fits file.</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -630,7 +631,7 @@ this in the same way. Let’s add the data quality to our fits file.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[10]:
+<span></span>Out[12]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -656,8 +657,8 @@ TFORM4  = &#39;J       &#39;
 TTYPE5  = &#39;QUALITY &#39;
 TFORM5  = &#39;K       &#39;
 EXTNAME = &#39;LIGHTCURVE&#39;
-CHECKSUM= &#39;WNWDXLVBWLVBWLVB&#39;   / HDU checksum updated 2018-06-12T21:10:11
-DATASUM = &#39;2548479009&#39;         / data unit checksum updated 2018-06-12T21:10:11
+CHECKSUM= &#39;UNUDVKTAUKTAUKTA&#39;   / HDU checksum updated 2018-10-10T15:59:22
+DATASUM = &#39;2548479009&#39;         / data unit checksum updated 2018-10-10T15:59:22
 </pre></div>
 </div>
 </div>
@@ -709,7 +710,7 @@ file, you can consider submitting your data produces to MAST.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

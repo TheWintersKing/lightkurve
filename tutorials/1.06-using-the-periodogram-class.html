@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>What is the Periodogram class? &mdash; lightkurve 1.0b19 documentation</title>
+  <title>What is the Periodogram class? &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -107,6 +107,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -380,7 +381,7 @@ We’re just going to use one quarter for this demo.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
@@ -391,24 +392,22 @@ We’re just going to use one quarter for this demo.</p>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Downloading URL https://mast.stsci.edu/api/v0/download/file?uri=mast:Kepler/url/missions/kepler/lightcurves/0102/010264202/kplr010264202-2011271113734_llc.fits to ./mastDownload/Kepler/kplr010264202_lc_Q011111111111111111/kplr010264202-2011271113734_llc.fits ... [Done]
+</pre></div></div>
+</div>
 <p>Let’s plot the light curve to see what we’re working with.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [3]:
+<span></span>In [4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lc</span><span class="o">.</span><span class="n">scatter</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[3]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c18d7f630&gt;
+<span></span><span class="n">lc</span><span class="o">.</span><span class="n">scatter</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -416,7 +415,7 @@ We’re just going to use one quarter for this demo.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.06-using-the-periodogram-class_5_1.png" src="../_images/tutorials_1.06-using-the-periodogram-class_5_1.png" />
+<img alt="../_images/tutorials_1.06-using-the-periodogram-class_5_0.png" src="../_images/tutorials_1.06-using-the-periodogram-class_5_0.png" />
 </div>
 </div>
 <p>This light curve looks like it has some structure in it! Let’s use the
@@ -425,11 +424,11 @@ periodogram from the <code class="docutils literal notranslate"><span class="pre
 <code class="docutils literal notranslate"><span class="pre">periodogram</span></code> method.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [4]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pg</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">periodogram</span><span class="p">()</span>
+<span></span><span class="n">pg</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">to_periodogram</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -437,21 +436,11 @@ periodogram from the <code class="docutils literal notranslate"><span class="pre
 original light curve.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [5]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[5]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10ce31e48&gt;
+<span></span><span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -459,7 +448,7 @@ original light curve.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.06-using-the-periodogram-class_9_1.png" src="../_images/tutorials_1.06-using-the-periodogram-class_9_1.png" />
+<img alt="../_images/tutorials_1.06-using-the-periodogram-class_9_0.png" src="../_images/tutorials_1.06-using-the-periodogram-class_9_0.png" />
 </div>
 </div>
 <p>This looks like there is a huge signal at a certain frequency! Let’s
@@ -467,21 +456,11 @@ plot it in period space, so that we can see what period the oscillation
 is occuring at.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[6]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c1b5a4630&gt;
+<span></span><span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -489,20 +468,20 @@ is occuring at.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.06-using-the-periodogram-class_11_1.png" src="../_images/tutorials_1.06-using-the-periodogram-class_11_1.png" />
+<img alt="../_images/tutorials_1.06-using-the-periodogram-class_11_0.png" src="../_images/tutorials_1.06-using-the-periodogram-class_11_0.png" />
 </div>
 </div>
 <p>This looks like a very fast period. Let’s find the period with the
 highest power and fold out light curve.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">period</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">period_at_max_power</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best period: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">period</span><span class="p">))</span>
-<span class="n">lc</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">scatter</span><span class="p">()</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">scatter</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -514,21 +493,11 @@ highest power and fold out light curve.</p>
 Best period: 0.2587311606278735 d
 </pre></div></div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[7]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c1c3b44e0&gt;
-</pre></div>
-</div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.06-using-the-periodogram-class_13_2.png" src="../_images/tutorials_1.06-using-the-periodogram-class_13_2.png" />
+<img alt="../_images/tutorials_1.06-using-the-periodogram-class_13_1.png" src="../_images/tutorials_1.06-using-the-periodogram-class_13_1.png" />
 </div>
 </div>
 <p>As is quite common for eclisping binaries with deep secondary eclipses,
@@ -536,13 +505,13 @@ we have found a harmonic of the period of the eclipsing binary. Let’s
 plot it again with quadruple the period.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">period</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">period_at_max_power</span> <span class="o">*</span> <span class="mi">4</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best period: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">period</span><span class="p">))</span>
-<span class="n">lc</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">scatter</span><span class="p">()</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">scatter</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -554,45 +523,35 @@ plot it again with quadruple the period.</p>
 Best period: 1.034924642511494 d
 </pre></div></div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[8]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c1c312438&gt;
-</pre></div>
-</div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.06-using-the-periodogram-class_15_2.png" src="../_images/tutorials_1.06-using-the-periodogram-class_15_2.png" />
+<img alt="../_images/tutorials_1.06-using-the-periodogram-class_15_1.png" src="../_images/tutorials_1.06-using-the-periodogram-class_15_1.png" />
 </div>
 </div>
 <p>It looks like we could probably get a better fit than this. Let’s try
 increasing the number of points in our periodogram.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># I&#39;ve set min_period and max_period to slightly reduce the computational time</span>
-<span class="n">pg</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">periodogram</span><span class="p">(</span><span class="n">min_period</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">max_period</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">oversample_factor</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">pg</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">to_periodogram</span><span class="p">(</span><span class="n">min_period</span><span class="o">=</span><span class="mf">0.9</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">max_period</span><span class="o">=</span><span class="mf">1.2</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">oversample_factor</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">period</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">period_at_max_power</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best period: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">period</span><span class="p">))</span>
-<span class="n">lc</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">scatter</span><span class="p">()</span>
+<span class="n">lc</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">period</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">scatter</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -604,21 +563,11 @@ increasing the number of points in our periodogram.</p>
 Best period: 1.0350971683913832 d
 </pre></div></div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[10]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1c1c97feb8&gt;
-</pre></div>
-</div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.06-using-the-periodogram-class_18_2.png" src="../_images/tutorials_1.06-using-the-periodogram-class_18_2.png" />
+<img alt="../_images/tutorials_1.06-using-the-periodogram-class_18_1.png" src="../_images/tutorials_1.06-using-the-periodogram-class_18_1.png" />
 </div>
 </div>
 <p>That’s improved out fit! It looks like this eclipsing binary has a
@@ -667,7 +616,7 @@ period of approximately 1 day.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

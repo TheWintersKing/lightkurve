@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>What are TargetPixelFile objects? &mdash; lightkurve 1.0b19 documentation</title>
+  <title>What are TargetPixelFile objects? &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -107,6 +107,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -463,8 +464,8 @@ observations using the <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([ 352.37632485,  352.39675805,  352.43762445, ...,  442.16263546,
-        442.18306983,  442.2035041 ])
+<span></span>array([352.37632485, 352.39675805, 352.43762445, ..., 442.16263546,
+       442.18306983, 442.2035041 ])
 </pre></div>
 </div>
 </div>
@@ -488,8 +489,8 @@ Time objects</a> using the
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;Time object: scale=&#39;tdb&#39; format=&#39;jd&#39; value=[ 2455185.37632485  2455185.39675805  2455185.43762445 ...,
-  2455275.16263546  2455275.18306983  2455275.2035041 ]&gt;
+<span></span>&lt;Time object: scale=&#39;tdb&#39; format=&#39;jd&#39; value=[2455185.37632485 2455185.39675805 2455185.43762445 ... 2455275.16263546
+ 2455275.18306983 2455275.2035041 ]&gt;
 </pre></div>
 </div>
 </div>
@@ -513,18 +514,43 @@ the <code class="docutils literal notranslate"><span class="pre">astropy_time.is
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
 <span></span>array([&#39;2009-12-19 21:01:54.467&#39;, &#39;2009-12-19 21:31:19.895&#39;,
        &#39;2009-12-19 22:30:10.752&#39;, ..., &#39;2010-03-19 15:54:11.704&#39;,
-       &#39;2010-03-19 16:23:37.233&#39;, &#39;2010-03-19 16:53:02.754&#39;],
-      dtype=&#39;&lt;U23&#39;)
+       &#39;2010-03-19 16:23:37.233&#39;, &#39;2010-03-19 16:53:02.754&#39;], dtype=&#39;&lt;U23&#39;)
 </pre></div>
 </div>
 </div>
-<p><strong>Beware:</strong> these ISO timestamps are in the Barycentric frame, and do
-not include corrections for light travel time or leap seconds.</p>
+<p><strong>Beware:</strong> these timestamps are in the Solar System Barycentric frame
+(TDB) and do not include corrections for light travel time or leap
+seconds. To use a different time scale, such as the Earth-centered UTC
+system, you can use <a class="reference external" href="http://docs.astropy.org/en/stable/time/#time-scale">AstroPy’s time scale conversion
+features</a>. For
+example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">astropy_time</span><span class="o">.</span><span class="n">utc</span><span class="o">.</span><span class="n">iso</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Out[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([&#39;2009-12-19 21:00:48.283&#39;, &#39;2009-12-19 21:30:13.712&#39;,
+       &#39;2009-12-19 22:29:04.569&#39;, ..., &#39;2010-03-19 15:53:05.518&#39;,
+       &#39;2010-03-19 16:22:31.048&#39;, &#39;2010-03-19 16:51:56.568&#39;], dtype=&#39;&lt;U23&#39;)
+</pre></div>
+</div>
+</div>
 <p>Next, let’s look at the actual image data, which is available via the
 <code class="docutils literal notranslate"><span class="pre">flux</span></code> property:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -534,7 +560,7 @@ not include corrections for light travel time or leap seconds.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[7]:
+<span></span>Out[8]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -551,7 +577,7 @@ the data. But you can pass the cadence you want to look at to the
 thruster firings, cosmic rays or asteroids.)</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -564,13 +590,13 @@ thruster firings, cosmic rays or asteroids.)</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.02-target-pixel-files_16_0.png" src="../_images/tutorials_1.02-target-pixel-files_16_0.png" />
+<img alt="../_images/tutorials_1.02-target-pixel-files_18_0.png" src="../_images/tutorials_1.02-target-pixel-files_18_0.png" />
 </div>
 </div>
 <p>The values shown in this image are also directly accessible as an array:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -580,20 +606,20 @@ thruster firings, cosmic rays or asteroids.)</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[9]:
+<span></span>Out[10]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([[             nan,   5.60793352e+00,   5.14911423e+01,
-          8.42417450e+01,   3.02213345e+01],
-       [  4.40456200e+01,   7.68612289e+01,   1.12277588e+03,
-          3.22620288e+03,   4.54867767e+02],
-       [  2.59111652e+01,   2.29075928e+02,   9.36265430e+03,
-          2.36062734e+04,   1.20877502e+03],
-       [  4.01008301e+01,   8.85439270e+02,   1.71021179e+03,
-          2.62548706e+03,   7.07966064e+02],
-       [  1.57194168e+02,   8.37134399e+02,   5.10215393e+02,
-          1.15010413e+03,   1.83133698e+02]], dtype=float32)
+<span></span>array([[          nan, 5.6079335e+00, 5.1491142e+01, 8.4241745e+01,
+        3.0221334e+01],
+       [4.4045620e+01, 7.6861229e+01, 1.1227759e+03, 3.2262029e+03,
+        4.5486777e+02],
+       [2.5911165e+01, 2.2907593e+02, 9.3626543e+03, 2.3606273e+04,
+        1.2087750e+03],
+       [4.0100830e+01, 8.8543927e+02, 1.7102118e+03, 2.6254871e+03,
+        7.0796606e+02],
+       [1.5719417e+02, 8.3713440e+02, 5.1021539e+02, 1.1501041e+03,
+        1.8313370e+02]], dtype=float32)
 </pre></div>
 </div>
 </div>
@@ -617,7 +643,7 @@ contaminant or you may want to measure the background.</p>
 boolean array:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -627,7 +653,7 @@ boolean array:</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[10]:
+<span></span>Out[11]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -635,7 +661,7 @@ boolean array:</p>
        [False, False,  True,  True, False],
        [False, False,  True,  True, False],
        [False,  True,  True,  True, False],
-       [False, False, False,  True, False]], dtype=bool)
+       [False, False, False,  True, False]])
 </pre></div>
 </div>
 </div>
@@ -643,21 +669,11 @@ boolean array:</p>
 if the flux of the star is all contained within the aperture.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">aperture_mask</span><span class="o">=</span><span class="n">tpf</span><span class="o">.</span><span class="n">pipeline_mask</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[11]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f59f8f17d30&gt;
+<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">aperture_mask</span><span class="o">=</span><span class="n">tpf</span><span class="o">.</span><span class="n">pipeline_mask</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -665,7 +681,7 @@ if the flux of the star is all contained within the aperture.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_1.02-target-pixel-files_24_1.png" src="../_images/tutorials_1.02-target-pixel-files_24_1.png" />
+<img alt="../_images/tutorials_1.02-target-pixel-files_26_0.png" src="../_images/tutorials_1.02-target-pixel-files_26_0.png" />
 </div>
 </div>
 <p>Now that we have the aperture we can create a Simple Aperture Photometry
@@ -675,17 +691,17 @@ taking a look at the ‘header’ of the FITS file, which contains
 information about the data set. Let’s just print the first 10 lines:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">header</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]</span>
+<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">header</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[12]:
+<span></span>Out[15]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -702,22 +718,22 @@ CREATOR = &#39;917482 TargetPixelExporterPipelineModule&#39; / pipeline job and 
 </pre></div>
 </div>
 </div>
-<p>We can look at the values in the second extention of the fits file by
-passing an extention number to the <code class="docutils literal notranslate"><span class="pre">header</span></code> function. For example, to
-look at all the column titles:</p>
+<p>We can look at the values in the second extension of the fits file by
+accessing the AstroPy FITS <code class="docutils literal notranslate"><span class="pre">HDUList</span></code> object. For example, to look at
+all the column titles:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;TTYPE*&#39;</span><span class="p">]</span>
+<span></span><span class="n">tpf</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TTYPE*&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[13]:
+<span></span>Out[17]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -781,7 +797,7 @@ TTYPE13 = &#39;RB_LEVEL&#39;           / column title: rolling band level
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to recover the first TESS planet candidate with Lightkurve? &mdash; lightkurve 1.0b19 documentation</title>
+  <title>How to recover the first TESS planet candidate with Lightkurve? &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -111,6 +111,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -536,7 +537,7 @@ can use the <code class="docutils literal notranslate"><span class="pre">hdu</sp
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>[&lt;astropy.io.fits.hdu.image.PrimaryHDU object at 0x7f67431ef6d8&gt;, &lt;astropy.io.fits.hdu.table.BinTableHDU object at 0x7f6743206e48&gt;, &lt;astropy.io.fits.hdu.image.ImageHDU object at 0x7f673d831390&gt;, &lt;astropy.io.fits.hdu.table.BinTableHDU object at 0x7f673d713828&gt;]
+<span></span>[&lt;astropy.io.fits.hdu.image.PrimaryHDU object at 0x7f8db31b99b0&gt;, &lt;astropy.io.fits.hdu.table.BinTableHDU object at 0x7f8db31571d0&gt;, &lt;astropy.io.fits.hdu.image.ImageHDU object at 0x7f8dad7dfd68&gt;, &lt;astropy.io.fits.hdu.table.BinTableHDU object at 0x7f8dad639e48&gt;]
 </pre></div>
 </div>
 </div>
@@ -798,11 +799,11 @@ TESS pipeline.</p>
 <p>Now we can use the plot function to take a look at the data.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span></span><span class="n">lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -817,7 +818,7 @@ TESS pipeline.</p>
 new aperture.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -843,7 +844,7 @@ new aperture.</p>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [15]:
+<span></span>In [17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -853,11 +854,11 @@ new aperture.</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [16]:
+<span></span>In [18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span></span><span class="n">lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -876,7 +877,7 @@ Here we’ll use a <code class="docutils literal notranslate"><span class="pre">
 5% of the full length of the light curve.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [17]:
+<span></span>In [19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -895,12 +896,12 @@ Here we’ll use a <code class="docutils literal notranslate"><span class="pre">
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [18]:
+<span></span>In [21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">flat_lc</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">window_length</span><span class="o">=</span><span class="mi">1001</span><span class="p">)</span>
-<span class="n">flat_lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span class="n">flat_lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -917,7 +918,7 @@ spacecraft. We can remove this simply by masking the light curve. First
 we’ll select the times that had the jitter.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [19]:
+<span></span>In [22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -929,12 +930,12 @@ we’ll select the times that had the jitter.</p>
 <p>Then we can just clip those times out.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [20]:
+<span></span>In [23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">masked_lc</span> <span class="o">=</span> <span class="n">flat_lc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-<span class="n">masked_lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span class="n">masked_lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -949,25 +950,25 @@ we’ll select the times that had the jitter.</p>
 to see the difference.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [21]:
+<span></span>In [24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># First define the `matplotlib.pyplot.axes`</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">flat_lc</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">flat_lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">()</span>
 
 <span class="c1"># Pass that axis to the next plot</span>
-<span class="n">masked_lc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">masked_lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Out[21]:
+<span></span>Out[24]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f673b901828&gt;
+<span></span>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f8dac8ab588&gt;
 </pre></div>
 </div>
 </div>
@@ -983,12 +984,12 @@ the light curve. We can do that with a simple lightkurve function
 <code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [22]:
+<span></span>In [25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">clipped_lc</span> <span class="o">=</span> <span class="n">masked_lc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-<span class="n">clipped_lc</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span class="n">clipped_lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -1006,7 +1007,7 @@ Let’s use a scatter plot instead. We can do this with the
 arguments.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [23]:
+<span></span>In [28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1024,7 +1025,7 @@ arguments.</p>
 <p>We can also add errorbars using the <code class="docutils literal notranslate"><span class="pre">lc.errorbar()</span></code> method.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [24]:
+<span></span>In [29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1044,7 +1045,7 @@ arguments.</p>
 orbital period and see if we can see the transit.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [25]:
+<span></span>In [30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1066,7 +1067,7 @@ the light curve to reduce the number of points, but also reduce the
 uncertainty of those points.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [26]:
+<span></span>In [31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1086,7 +1087,7 @@ uncertainty of those points.</p>
 <p>Note that you can actually do all these steps in just a few lines:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [27]:
+<span></span>In [32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1111,7 +1112,7 @@ aperture. Let’s compare the results from using these two different
 apertures.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [28]:
+<span></span>In [33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1127,7 +1128,7 @@ apertures.</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [30]:
+<span></span>In [34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1192,7 +1193,7 @@ removal methods applied. We will explore those in a future tutorial!</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

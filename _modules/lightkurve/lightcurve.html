@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lightkurve.lightcurve &mdash; lightkurve 1.0b19 documentation</title>
+  <title>lightkurve.lightcurve &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -99,6 +99,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../other_software.html">Other software</a></li>
 </ul>
@@ -169,7 +170,6 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -178,7 +178,6 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">signal</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="kn">from</span> <span class="nn">astropy.stats</span> <span class="k">import</span> <span class="n">sigma_clip</span>
@@ -229,6 +228,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flux</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="c1"># Trigger warning if time=NaN are present</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Warning: NaN times are present in LightCurve&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_array</span><span class="p">(</span><span class="n">flux</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;flux&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flux_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_array</span><span class="p">(</span><span class="n">flux_err</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;flux_err&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_format</span> <span class="o">=</span> <span class="n">time_format</span>
@@ -324,7 +326,7 @@
             <span class="k">return</span> <span class="n">btjd_to_astropy_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_format</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_scale</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LightCurve.properties"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.LightCurve.html#lightkurve.lightcurve.LightCurve.properties">[docs]</a>    <span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Print out a description of each of the non-callable attributes of a</span>
 <span class="sd">        LightCurve object.</span>
 
@@ -376,7 +378,7 @@
                 <span class="k">if</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">typ</span><span class="p">:</span>
                     <span class="n">output</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="n">attr</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;print&#39;</span><span class="p">]])</span>
                     <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">max_lines</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="n">output</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">max_lines</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LightCurve.append"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.LightCurve.html#lightkurve.lightcurve.LightCurve.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -473,8 +475,11 @@
                                                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">trend_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">lc_clean</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">trend_signal</span><span class="p">)</span>
         <span class="n">flatten_lc</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux</span> <span class="o">=</span> <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux</span> <span class="o">/</span> <span class="n">trend_signal</span>
-        <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux_err</span> <span class="o">=</span> <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux_err</span> <span class="o">/</span> <span class="n">trend_signal</span>
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="c1"># ignore invalid division warnings</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+            <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux</span> <span class="o">=</span> <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux</span> <span class="o">/</span> <span class="n">trend_signal</span>
+            <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux_err</span> <span class="o">=</span> <span class="n">flatten_lc</span><span class="o">.</span><span class="n">flux_err</span> <span class="o">/</span> <span class="n">trend_signal</span>
         <span class="k">if</span> <span class="n">return_trend</span><span class="p">:</span>
             <span class="n">trend_lc</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="n">trend_lc</span><span class="o">.</span><span class="n">flux</span> <span class="o">=</span> <span class="n">trend_signal</span>
@@ -729,8 +734,14 @@
 
         <span class="k">return</span> <span class="n">binned_lc</span></div>
 
-<div class="viewcode-block" id="LightCurve.cdpp"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.LightCurve.html#lightkurve.lightcurve.LightCurve.cdpp">[docs]</a>    <span class="k">def</span> <span class="nf">cdpp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transit_duration</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">savgol_window</span><span class="o">=</span><span class="mi">101</span><span class="p">,</span> <span class="n">savgol_polyorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-             <span class="n">sigma_clip</span><span class="o">=</span><span class="mf">5.</span><span class="p">):</span>
+<div class="viewcode-block" id="LightCurve.cdpp"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.LightCurve.html#lightkurve.lightcurve.LightCurve.cdpp">[docs]</a>    <span class="k">def</span> <span class="nf">cdpp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;DEPRECATED: use `estimate_cdpp()` instead.&quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;WARNING: cdpp() is deprecated and will be removed in v1.0.0; &quot;</span>
+                    <span class="s2">&quot;please use estimate_cdpp() instead.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_cdpp</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">estimate_cdpp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transit_duration</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">savgol_window</span><span class="o">=</span><span class="mi">101</span><span class="p">,</span>
+                      <span class="n">savgol_polyorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sigma_clip</span><span class="o">=</span><span class="mf">5.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimate the CDPP noise metric using the Savitzky-Golay (SG) method.</span>
 
 <span class="sd">        A common estimate of the noise in a lightcurve is the scatter that</span>
@@ -792,7 +803,7 @@
         <span class="n">cleaned_lc</span> <span class="o">=</span> <span class="n">detrended_lc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_clip</span><span class="p">)</span>
         <span class="n">mean</span> <span class="o">=</span> <span class="n">running_mean</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">cleaned_lc</span><span class="o">.</span><span class="n">flux</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">transit_duration</span><span class="p">)</span>
         <span class="n">cdpp_ppm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span>
-        <span class="k">return</span> <span class="n">cdpp_ppm</span></div>
+        <span class="k">return</span> <span class="n">cdpp_ppm</span>
 
     <span class="k">def</span> <span class="nf">_create_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;plot&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;lightkurve&#39;</span><span class="p">,</span>
@@ -1021,11 +1032,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_or_buf</span><span class="o">=</span><span class="n">path_or_buf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LightCurve.periodogram"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.LightCurve.html#lightkurve.lightcurve.LightCurve.periodogram">[docs]</a>    <span class="k">def</span> <span class="nf">periodogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nterms</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nyquist_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">oversample_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">min_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">min_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">freq_unit</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">to_periodogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nterms</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nyquist_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">oversample_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                       <span class="n">min_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">min_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">frequency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">freq_unit</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">u</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a `Periodogram` power spectrum object.</span>
 
 <span class="sd">        Parameters</span>
@@ -1083,15 +1094,15 @@
                                            <span class="n">nyquist_factor</span><span class="o">=</span><span class="n">nyquist_factor</span><span class="p">,</span>
                                            <span class="n">oversample_factor</span><span class="o">=</span><span class="n">oversample_factor</span><span class="p">,</span>
                                            <span class="n">freq_unit</span><span class="o">=</span><span class="n">freq_unit</span><span class="p">,</span>
-                                           <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+                                           <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LightCurve.to_fits"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.LightCurve.html#lightkurve.lightcurve.LightCurve.to_fits">[docs]</a>    <span class="k">def</span> <span class="nf">to_fits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Writes the KeplerLightCurve to a fits file.</span>
+        <span class="sd">&quot;&quot;&quot;Writes the LightCurve to a FITS file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        path : string, default None</span>
-<span class="sd">            File path, if None returns an astropy.io.fits object.</span>
+<span class="sd">            File path, if `None` returns an astropy.io.fits.HDUList object.</span>
 <span class="sd">        overwrite : bool</span>
 <span class="sd">            Whether or not to overwrite the file</span>
 <span class="sd">        extra_data : dict</span>
@@ -1171,6 +1182,10 @@
                     <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
                                             <span class="nb">format</span><span class="o">=</span><span class="n">typedir</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">extra_data</span><span class="p">[</span><span class="n">kw</span><span class="p">][</span><span class="mi">0</span><span class="p">])],</span>
                                             <span class="n">array</span><span class="o">=</span><span class="n">extra_data</span><span class="p">[</span><span class="n">kw</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="s1">&#39;SAP_QUALITY&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">extra_data</span><span class="p">:</span>
+                <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;SAP_QUALITY&#39;</span><span class="p">,</span>
+                                        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;J&#39;</span><span class="p">,</span>
+                                        <span class="n">array</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">))))</span>
 
             <span class="n">coldefs</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">ColDefs</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span>
             <span class="n">hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">(</span><span class="n">coldefs</span><span class="p">)</span>
@@ -1181,12 +1196,6 @@
             <span class="sd">&quot;&quot;&quot;Returns an astropy.io.fits.HDUList object.&quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">HDUList</span><span class="p">([</span><span class="n">_make_primary_hdu</span><span class="p">(</span><span class="n">extra_data</span><span class="o">=</span><span class="n">extra_data</span><span class="p">),</span>
                                  <span class="n">_make_lightcurve_extension</span><span class="p">(</span><span class="n">extra_data</span><span class="o">=</span><span class="n">extra_data</span><span class="p">)])</span>
-
-        <span class="k">def</span> <span class="nf">_header_template</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Returns a template `fits.Header` object for a given extension.&quot;&quot;&quot;</span>
-            <span class="n">template_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PACKAGEDIR</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
-                                       <span class="s2">&quot;lc-ext</span><span class="si">{}</span><span class="s2">-header.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">fromtextfile</span><span class="p">(</span><span class="n">template_fn</span><span class="p">)</span>
 
         <span class="n">hdu</span> <span class="o">=</span> <span class="n">_hdulist</span><span class="p">(</span><span class="o">**</span><span class="n">extra_data</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1367,12 +1376,12 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">KeplerLightCurve</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="KeplerLightCurve.to_fits"><a class="viewcode-back" href="../../api/lightkurve.lightcurve.KeplerLightCurve.html#lightkurve.lightcurve.KeplerLightCurve.to_fits">[docs]</a>    <span class="k">def</span> <span class="nf">to_fits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Export the KeplerLightCurve as an astropy.io.fits object.</span>
+        <span class="sd">&quot;&quot;&quot;Writes the KeplerLightCurve to a FITS file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        path : string, default None</span>
-<span class="sd">            File path, if None returns an astropy.io.fits object.</span>
+<span class="sd">            File path, if `None` returns an astropy.io.fits.HDUList object.</span>
 <span class="sd">        overwrite : bool</span>
 <span class="sd">            Whether or not to overwrite the file</span>
 <span class="sd">        extra_data : dict</span>
@@ -1397,7 +1406,8 @@
             <span class="s1">&#39;RA_OBJ&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span>
             <span class="s1">&#39;DEC_OBJ&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">,</span>
             <span class="s1">&#39;EQUINOX&#39;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span>
-            <span class="s1">&#39;DATE-OBS&#39;</span><span class="p">:</span> <span class="n">Time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">2454833.</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;jd&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">isot</span><span class="p">}</span>
+            <span class="s1">&#39;DATE-OBS&#39;</span><span class="p">:</span> <span class="n">Time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">2454833.</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;jd&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">isot</span><span class="p">,</span>
+            <span class="s1">&#39;SAP_QUALITY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quality</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kepler_specific_data</span><span class="p">:</span>
             <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">kw</span><span class="o">.</span><span class="n">lower</span> <span class="o">==</span> <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">extra_data</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="n">extra_data</span><span class="p">[</span><span class="n">kw</span><span class="p">]</span> <span class="o">=</span> <span class="n">kepler_specific_data</span><span class="p">[</span><span class="n">kw</span><span class="p">]</span>
@@ -1498,7 +1508,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

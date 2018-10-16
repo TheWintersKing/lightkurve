@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Interactively inspecting Target Pixel Files and Lightcurves &mdash; lightkurve 1.0b19 documentation</title>
+  <title>Interactively inspecting Target Pixel Files and Lightcurves &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -114,6 +114,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -410,7 +411,7 @@ lightcurves with fewer than 30000 cadences.</p>
 <p>Let’s first look at the target HL Tau, a young star that possesses a
 gapped circumstellar disk <a class="reference external" href="http://www.almaobservatory.org/en/press-release/revolutionary-alma-image-reveals-planetary-genesis/">imaged by the Atacama Large Millimeter
 Array</a>.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
@@ -419,6 +420,14 @@ Array</a>.</p>
 <span></span><span class="n">tpf</span> <span class="o">=</span> <span class="n">KeplerTargetPixelFile</span><span class="o">.</span><span class="n">from_archive</span><span class="p">(</span><span class="mi">210690913</span><span class="p">)</span> <span class="c1"># HL Tau</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Downloading URL https://mast.stsci.edu/api/v0/download/file?uri=mast:K2/url/missions/k2/target_pixel_files/c13/210600000/90000/ktwo210690913-c13_lpd-targ.fits.gz to ./mastDownload/K2/ktwo210690913-c13_lc/ktwo210690913-c13_lpd-targ.fits.gz ... [Done]
+</pre></div></div>
 </div>
 <p>The K2 postage stamp of HL Tau contains a portion of a nearby source of
 comparable brightness. The weakly overlapping point spread functions
@@ -864,7 +873,7 @@ relies.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

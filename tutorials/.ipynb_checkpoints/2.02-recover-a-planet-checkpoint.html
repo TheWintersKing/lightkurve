@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to recover a known planet in Kepler data? &mdash; lightkurve 1.0b19 documentation</title>
+  <title>How to recover a known planet in Kepler data? &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -99,6 +99,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../other_software.html">Other software</a></li>
 </ul>
@@ -354,10 +355,10 @@ div.nboutput div.output_area.stderr {
 transiting planet candidate in the Kepler data.</p>
 <p>We will show how you can recover the signal of
 <a class="reference external" href="https://en.wikipedia.org/wiki/Kepler-10b">Kepler-10b</a>, the first
-rocky planet that was discovered by the Kepler mission. Kepler-10 is a
-Sun-like (G-type) star approximately 600 light years away in the
-constellation of Cygnus. In this tutorial, we will download the pixel
-data of Kepler-10, extract a lightcurve, and recover the planet.</p>
+rocky planet that was discovered by Kepler! Kepler-10 is a Sun-like
+(G-type) star approximately 600 light years away in the constellation of
+Cygnus. In this tutorial, we will download the pixel data of Kepler-10,
+extract a lightcurve, and recover the planet.</p>
 <p>Kepler pixel data is distributed in “Target Pixel Files”. You can read
 more about them in our tutorial
 <a class="reference external" href="http://lightkurve.keplerscience.org/tutorials/target-pixel-files.html">here</a>.
@@ -451,12 +452,12 @@ object called ‘trend’. This contains only the long term variability.</p>
 <p>Let’s plot the trend estimated by the Savitzky-Golay filter:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>                         <span class="c1">#plot() returns a matplotlib axis</span>
-<span class="n">trend</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">);</span>           <span class="c1">#which we can pass to the next plot() to use the same plotting window</span>
+<span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">errorbar</span><span class="p">()</span>                    <span class="c1"># plot() returns a matplotlib axis</span>
+<span class="n">trend</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">);</span>       <span class="c1"># which we can pass to the next plot() to use the same plotting window</span>
 </pre></div>
 </div>
 </div>
@@ -470,11 +471,11 @@ object called ‘trend’. This contains only the long term variability.</p>
 <p>and the flat lightcurve:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">flat</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+<span></span><span class="n">flat</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -485,80 +486,43 @@ object called ‘trend’. This contains only the long term variability.</p>
 <img alt="../../_images/tutorials_.ipynb_checkpoints_2.02-recover-a-planet-checkpoint_16_0.png" src="../../_images/tutorials_.ipynb_checkpoints_2.02-recover-a-planet-checkpoint_16_0.png" />
 </div>
 </div>
-<p>Now, let’s run a period search function using the <a class="reference external" href="http://adsabs.harvard.edu/abs/2002A%26A...391..369K">Box-Least Squares
-algorithm</a>,
-which is available in the latest dev version of astropy:</p>
-<div class="nbinput docutils container">
+<p>Now, let’s run a period search function using the Box-Least Squares
+algorithm (<a class="reference external" href="http://adsabs.harvard.edu/abs/2002A%26A...391..369K">http://adsabs.harvard.edu/abs/2002A%26A…391..369K</a>). We will
+shortly have a built in BLS implementation, but until then you can
+download and install it separately from lightkurve using</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mirca/transit-periodogram.git</span></code></p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">astropy.stats</span> <span class="k">import</span> <span class="n">bls</span>
+<span></span><span class="kn">from</span> <span class="nn">transit_periodogram</span> <span class="k">import</span> <span class="n">transit_periodogram</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-8-85e685b4735b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> astropy<span class="ansi-blue-fg">.</span>stats <span class="ansi-green-fg">import</span> bls
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">import</span> numpy <span class="ansi-green-fg">as</span> np
-<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">import</span> matplotlib<span class="ansi-blue-fg">.</span>pyplot <span class="ansi-green-fg">as</span> plt
-
-<span class="ansi-red-fg">ImportError</span>: cannot import name &#39;bls&#39;
-</pre></div></div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">periods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">)</span>
 <span class="n">durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [10]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">bls</span><span class="o">.</span><span class="n">BoxLeastSquares</span><span class="p">(</span><span class="n">flat</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">flat</span><span class="o">.</span><span class="n">flux</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="n">flat</span><span class="o">.</span><span class="n">flux_err</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [11]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">periods</span><span class="p">,</span> <span class="n">durations</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">best_fit</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">period</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">power</span><span class="p">)]</span>
+<span class="n">power</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">transit_periodogram</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">flat</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+                                              <span class="n">flux</span><span class="o">=</span><span class="n">flat</span><span class="o">.</span><span class="n">flux</span><span class="p">,</span>
+                                              <span class="n">flux_err</span><span class="o">=</span><span class="n">flat</span><span class="o">.</span><span class="n">flux_err</span><span class="p">,</span>
+                                              <span class="n">periods</span><span class="o">=</span><span class="n">periods</span><span class="p">,</span>
+                                              <span class="n">durations</span><span class="o">=</span><span class="n">durations</span><span class="p">)</span>
+<span class="n">best_fit</span> <span class="o">=</span> <span class="n">periods</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">power</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -576,11 +540,11 @@ Best Fit Period: 0.8374999999999408 days
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">flat</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">best_fit</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">);</span>
+<span></span><span class="n">flat</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">best_fit</span><span class="p">)</span><span class="o">.</span><span class="n">errorbar</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -588,17 +552,7 @@ Best Fit Period: 0.8374999999999408 days
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_.ipynb_checkpoints_2.02-recover-a-planet-checkpoint_24_0.png" src="../../_images/tutorials_.ipynb_checkpoints_2.02-recover-a-planet-checkpoint_24_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
+<img alt="../../_images/tutorials_.ipynb_checkpoints_2.02-recover-a-planet-checkpoint_22_0.png" src="../../_images/tutorials_.ipynb_checkpoints_2.02-recover-a-planet-checkpoint_22_0.png" />
 </div>
 </div>
 </div>
@@ -636,7 +590,7 @@ Best Fit Period: 0.8374999999999408 days
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

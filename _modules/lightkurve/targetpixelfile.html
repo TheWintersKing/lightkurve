@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>lightkurve.targetpixelfile &mdash; lightkurve 1.0b19 documentation</title>
+  <title>lightkurve.targetpixelfile &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -99,6 +99,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../other_software.html">Other software</a></li>
 </ul>
@@ -179,7 +180,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 <span class="kn">from</span> <span class="nn">astropy.coordinates</span> <span class="k">import</span> <span class="n">SkyCoord</span>
-<span class="kn">from</span> <span class="nn">astropy.wcs.utils</span> <span class="k">import</span> <span class="n">skycoord_to_pixel</span><span class="p">,</span> <span class="n">pixel_to_skycoord</span>
 <span class="kn">from</span> <span class="nn">astropy.io.fits.card</span> <span class="k">import</span> <span class="n">Undefined</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">PACKAGEDIR</span><span class="p">,</span> <span class="n">MPLSTYLE</span>
@@ -225,15 +225,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_hdu</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the header for a given extension.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the header of the primary extension.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Right Ascension of target (&#39;RA_OBJ&#39; header keyword).&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;RA_OBJ&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;RA_OBJ&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -241,7 +242,7 @@
     <span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Declination of target (&#39;DEC_OBJ&#39; header keyword).&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;DEC_OBJ&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;DEC_OBJ&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -422,7 +423,7 @@
             <span class="k">return</span> <span class="n">ra</span><span class="p">[</span><span class="n">cadence</span><span class="p">],</span> <span class="n">dec</span><span class="p">[</span><span class="n">cadence</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span>
 
-    <span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Print out a description of each of the non-callable attributes of a</span>
 <span class="sd">        TargetPixelFile object.</span>
 
@@ -497,19 +498,11 @@
 <span class="sd">            Object containing the resulting lightcurve.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;aperture&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aperture_photometry</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_aperture_photometry</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;prf&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prf_lightcurve</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Photometry method must be &#39;aperture&#39; or &#39;prf&#39;.&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">aperture_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;This is an abstract method that is &quot;</span>
-                                  <span class="s2">&quot;implemented in the subclasses.&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">prf_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;This is an abstract method that is &quot;</span>
-                                  <span class="s2">&quot;implemented in the subclasses.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse_aperture_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parse the `aperture_mask` parameter as given by a user.</span>
@@ -543,8 +536,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_aperture_mask</span> <span class="o">=</span> <span class="n">aperture_mask</span>
         <span class="k">return</span> <span class="n">aperture_mask</span>
 
-    <span class="k">def</span> <span class="nf">centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="s1">&#39;pipeline&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns centroids based on sample moments.</span>
+    <span class="k">def</span> <span class="nf">centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;DEPRECATED: use `estimate_cdpp()` instead.&quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;WARNING: centroids() is deprecated and will be removed in v1.0.0; &quot;</span>
+                    <span class="s2">&quot;please use estimate_centroids() instead.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_centroids</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">estimate_centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="s1">&#39;pipeline&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns centroid positions estimated using sample moments.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -721,7 +720,7 @@
                                 <span class="n">bitmask</span><span class="o">=</span><span class="n">quality_bitmask</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;KEPLERID&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;KEPLERID&#39;</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="k">pass</span>
 
@@ -811,22 +810,22 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">obsmode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;&#39;short cadence&#39; or &#39;long cadence&#39;. (&#39;OBSMODE&#39; header keyword)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;OBSMODE&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBSMODE&#39;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kepler CCD module number. (&#39;MODULE&#39; header keyword)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;MODULE&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;MODULE&#39;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kepler CCD module output number. (&#39;OUTPUT&#39; header keyword)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;OUTPUT&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OUTPUT&#39;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kepler CCD channel number. (&#39;CHANNEL&#39; header keyword)&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;CHANNEL&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CHANNEL&#39;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">astropy_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -837,7 +836,7 @@
     <span class="k">def</span> <span class="nf">quarter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Kepler quarter number. (&#39;QUARTER&#39; header keyword)&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="n">ext</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="s1">&#39;QUARTER&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;QUARTER&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -845,7 +844,7 @@
     <span class="k">def</span> <span class="nf">campaign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;K2 Campaign number. (&#39;CAMPAIGN&#39; header keyword)&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="n">ext</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="s1">&#39;CAMPAIGN&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CAMPAIGN&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -853,11 +852,11 @@
     <span class="k">def</span> <span class="nf">mission</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;&#39;Kepler&#39; or &#39;K2&#39;. (&#39;MISSION&#39; header keyword)&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="n">ext</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="s1">&#39;MISSION&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;MISSION&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">aperture_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="s1">&#39;pipeline&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">extract_aperture_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="s1">&#39;pipeline&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a LightCurve obtained using aperture photometry.</span>
 
 <span class="sd">        Parameters</span>
@@ -877,7 +876,7 @@
         <span class="n">aperture_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_aperture_mask</span><span class="p">(</span><span class="n">aperture_mask</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">aperture_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Warning: aperture mask contains zero pixels.&#39;</span><span class="p">)</span>
-        <span class="n">centroid_col</span><span class="p">,</span> <span class="n">centroid_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">(</span><span class="n">aperture_mask</span><span class="p">)</span>
+        <span class="n">centroid_col</span><span class="p">,</span> <span class="n">centroid_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_centroids</span><span class="p">(</span><span class="n">aperture_mask</span><span class="p">)</span>
         <span class="c1"># Ignore warnings related to zero or negative errors</span>
         <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
@@ -893,7 +892,7 @@
                 <span class="s1">&#39;cadenceno&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cadenceno</span><span class="p">,</span>
                 <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span>
                 <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">,</span>
-                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
                 <span class="s1">&#39;targetid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">KeplerLightCurve</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                                 <span class="n">time_format</span><span class="o">=</span><span class="s1">&#39;bkjd&#39;</span><span class="p">,</span>
@@ -916,7 +915,7 @@
                 <span class="s1">&#39;cadenceno&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cadenceno</span><span class="p">,</span>
                 <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span>
                 <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">,</span>
-                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
                 <span class="s1">&#39;targetid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">KeplerLightCurve</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                                 <span class="n">time_format</span><span class="o">=</span><span class="s1">&#39;bkjd&#39;</span><span class="p">,</span>
@@ -947,7 +946,7 @@
         <span class="kn">from</span> <span class="nn">.prf</span> <span class="k">import</span> <span class="n">UniformPrior</span><span class="p">,</span> <span class="n">GaussianPrior</span>
         <span class="c1"># Set up the model</span>
         <span class="k">if</span> <span class="s1">&#39;star_priors&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">centr_col</span><span class="p">,</span> <span class="n">centr_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">()</span>
+            <span class="n">centr_col</span><span class="p">,</span> <span class="n">centr_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_centroids</span><span class="p">()</span>
             <span class="n">star_priors</span> <span class="o">=</span> <span class="p">[</span><span class="n">StarPrior</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">GaussianPrior</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">centr_col</span><span class="p">),</span>
                                                        <span class="n">var</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">centr_col</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span>
                                      <span class="n">row</span><span class="o">=</span><span class="n">GaussianPrior</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">centr_row</span><span class="p">),</span>
@@ -961,7 +960,8 @@
         <span class="k">if</span> <span class="s1">&#39;background_prior&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux_bkg</span><span class="p">)):</span>  <span class="c1"># If TargetPixelFile has no background flux data</span>
                 <span class="c1"># Use the median of the lower half of flux as an estimate for flux_bkg</span>
-                <span class="n">clipped_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">)</span>
+                <span class="n">clipped_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">flux</span><span class="p">)</span>
                 <span class="n">flux_prior</span> <span class="o">=</span> <span class="n">GaussianPrior</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">clipped_flux</span><span class="p">),</span>
                                            <span class="n">var</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">clipped_flux</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -970,7 +970,7 @@
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;background_prior&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BackgroundPrior</span><span class="p">(</span><span class="n">flux</span><span class="o">=</span><span class="n">flux_prior</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">TPFModel</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">prf_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cadences</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">extract_prf_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cadences</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the results of PRF photometry applied to the pixel file.</span>
 
 <span class="sd">        Parameters</span>
@@ -999,7 +999,7 @@
         <span class="k">return</span> <span class="n">prfphot</span>
 
     <span class="k">def</span> <span class="nf">prf_lightcurve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">lc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prf_photometry</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">lightcurves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_prf_photometry</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">lightcurves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;quality&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quality</span><span class="p">,</span>
                 <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
                 <span class="s1">&#39;campaign&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">campaign</span><span class="p">,</span>
@@ -1078,7 +1078,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">mid_hdu</span> <span class="o">=</span> <span class="n">_open_image</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">extension</span><span class="p">)</span>
             <span class="n">wcs_ref</span> <span class="o">=</span> <span class="n">WCS</span><span class="p">(</span><span class="n">mid_hdu</span><span class="p">)</span>
-            <span class="n">column</span><span class="p">,</span> <span class="n">row</span> <span class="o">=</span> <span class="n">wcs_ref</span><span class="o">.</span><span class="n">wcs_world2pix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">position</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">deg</span><span class="p">],</span> <span class="p">[</span><span class="n">position</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">deg</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">column</span><span class="p">,</span> <span class="n">row</span> <span class="o">=</span> <span class="n">wcs_ref</span><span class="o">.</span><span class="n">wcs_world2pix</span><span class="p">(</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([[</span><span class="n">position</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">deg</span><span class="p">],</span> <span class="p">[</span><span class="n">position</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">deg</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                            <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">column</span><span class="p">,</span> <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">column</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">FactoryError</span><span class="p">(</span><span class="s2">&quot;Images must have a valid WCS astrometric solution.&quot;</span><span class="p">)</span>
@@ -1090,7 +1092,7 @@
                                                <span class="n">n_cols</span><span class="o">=</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                                                <span class="n">target_id</span><span class="o">=</span><span class="n">target_id</span><span class="p">)</span>
 
-        <span class="c1">#Get some basic keywords</span>
+        <span class="c1"># Get some basic keywords</span>
         <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">basic_keywords</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">mid_hdu</span><span class="o">.</span><span class="n">header</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mid_hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">kw</span><span class="p">],</span> <span class="n">Undefined</span><span class="p">):</span>
@@ -1101,7 +1103,7 @@
         <span class="n">allkeys</span> <span class="o">=</span> <span class="n">hdu0_keywords</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">allkeys</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">carry_keywords</span><span class="p">)</span>
 
-        <span class="n">ext_info</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1CRV5P&#39;</span><span class="p">:</span><span class="n">column</span><span class="p">,</span> <span class="s1">&#39;2CRV5P&#39;</span><span class="p">:</span><span class="n">row</span><span class="p">}</span>
+        <span class="n">ext_info</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1CRV5P&#39;</span><span class="p">:</span> <span class="n">column</span><span class="p">,</span> <span class="s1">&#39;2CRV5P&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">}</span>
 
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)):</span>
             <span class="n">hdu</span> <span class="o">=</span> <span class="n">_open_image</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span>
@@ -1187,7 +1189,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pos_corr1</span><span class="p">[</span><span class="n">frameno</span><span class="p">]</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;POS_CORR1&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s1">&#39;POS_CORR2&#39;</span> <span class="ow">in</span> <span class="n">header</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pos_corr2</span><span class="p">[</span><span class="n">frameno</span><span class="p">]</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;POS_CORR2&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">wcs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">wcs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pos_corr1</span><span class="p">[</span><span class="n">frameno</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_corr2</span><span class="p">[</span><span class="n">frameno</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_check_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1203,7 +1205,9 @@
     <span class="k">def</span> <span class="nf">get_tpf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdu0_keywords</span><span class="o">=</span><span class="p">{},</span> <span class="n">ext_info</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns a KeplerTargetPixelFile object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_data</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">KeplerTargetPixelFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdulist</span><span class="p">(</span><span class="n">hdu0_keywords</span><span class="o">=</span><span class="n">hdu0_keywords</span><span class="p">,</span> <span class="n">ext_info</span><span class="o">=</span><span class="n">ext_info</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">KeplerTargetPixelFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdulist</span><span class="p">(</span><span class="n">hdu0_keywords</span><span class="o">=</span><span class="n">hdu0_keywords</span><span class="p">,</span>
+                                                   <span class="n">ext_info</span><span class="o">=</span><span class="n">ext_info</span><span class="p">),</span>
+                                     <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_hdulist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdu0_keywords</span><span class="o">=</span><span class="p">{},</span> <span class="n">ext_info</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot;Returns an astropy.io.fits.HDUList object.&quot;&quot;&quot;</span>
@@ -1236,9 +1240,9 @@
                    <span class="s2">&quot;RA_OBJ&quot;</span><span class="p">,</span> <span class="s2">&quot;DEC_OBJ&quot;</span><span class="p">]:</span>
             <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">kw</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="c1">#Some keywords just shouldn&#39;t be passed to the new header.</span>
+        <span class="c1"># Some keywords just shouldn&#39;t be passed to the new header.</span>
         <span class="n">bad_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ORIGIN&#39;</span><span class="p">,</span> <span class="s1">&#39;DATE&#39;</span><span class="p">,</span> <span class="s1">&#39;OBJECT&#39;</span><span class="p">,</span> <span class="s1">&#39;SIMPLE&#39;</span><span class="p">,</span> <span class="s1">&#39;BITPIX&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;NAXIS&#39;</span> <span class="p">,</span><span class="s1">&#39;EXTEND&#39;</span><span class="p">,</span> <span class="s1">&#39;NEXTEND&#39;</span><span class="p">,</span> <span class="s1">&#39;EXTNAME&#39;</span><span class="p">,</span> <span class="s1">&#39;NAXIS1&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;NAXIS&#39;</span><span class="p">,</span> <span class="s1">&#39;EXTEND&#39;</span><span class="p">,</span> <span class="s1">&#39;NEXTEND&#39;</span><span class="p">,</span> <span class="s1">&#39;EXTNAME&#39;</span><span class="p">,</span> <span class="s1">&#39;NAXIS1&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;NAXIS2&#39;</span><span class="p">,</span> <span class="s1">&#39;QUALITY&#39;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">kw</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">hdu0_keywords</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">bad_keys</span><span class="p">:</span>
@@ -1299,20 +1303,20 @@
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                     <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">kw</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="n">kw</span><span class="p">],</span>
                                       <span class="n">template</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="n">kw</span><span class="p">])</span>
-        <span class="n">wcs_keywords</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;CTYPE1&#39;</span><span class="p">:</span><span class="s1">&#39;1CTYP</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CTYPE2&#39;</span><span class="p">:</span><span class="s1">&#39;2CTYP</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CRPIX1&#39;</span><span class="p">:</span><span class="s1">&#39;1CRPX</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CRPIX2&#39;</span><span class="p">:</span><span class="s1">&#39;2CRPX</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CRVAL1&#39;</span><span class="p">:</span><span class="s1">&#39;1CRVL</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CRVAL2&#39;</span><span class="p">:</span><span class="s1">&#39;2CRVL</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CUNIT1&#39;</span><span class="p">:</span><span class="s1">&#39;1CUNI</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CUNIT2&#39;</span><span class="p">:</span><span class="s1">&#39;2CUNI</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CDELT1&#39;</span><span class="p">:</span><span class="s1">&#39;1CDLT</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;CDELT2&#39;</span><span class="p">:</span><span class="s1">&#39;2CDLT</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;PC1_1&#39;</span><span class="p">:</span><span class="s1">&#39;11PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;PC1_2&#39;</span><span class="p">:</span><span class="s1">&#39;12PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;PC2_1&#39;</span><span class="p">:</span><span class="s1">&#39;21PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;PC2_2&#39;</span><span class="p">:</span><span class="s1">&#39;22PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">}</span>
+        <span class="n">wcs_keywords</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;CTYPE1&#39;</span><span class="p">:</span> <span class="s1">&#39;1CTYP</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CTYPE2&#39;</span><span class="p">:</span> <span class="s1">&#39;2CTYP</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CRPIX1&#39;</span><span class="p">:</span> <span class="s1">&#39;1CRPX</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CRPIX2&#39;</span><span class="p">:</span> <span class="s1">&#39;2CRPX</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CRVAL1&#39;</span><span class="p">:</span> <span class="s1">&#39;1CRVL</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CRVAL2&#39;</span><span class="p">:</span> <span class="s1">&#39;2CRVL</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CUNIT1&#39;</span><span class="p">:</span> <span class="s1">&#39;1CUNI</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CUNIT2&#39;</span><span class="p">:</span> <span class="s1">&#39;2CUNI</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CDELT1&#39;</span><span class="p">:</span> <span class="s1">&#39;1CDLT</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;CDELT2&#39;</span><span class="p">:</span> <span class="s1">&#39;2CDLT</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;PC1_1&#39;</span><span class="p">:</span> <span class="s1">&#39;11PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;PC1_2&#39;</span><span class="p">:</span> <span class="s1">&#39;12PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;PC2_1&#39;</span><span class="p">:</span> <span class="s1">&#39;21PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;PC2_2&#39;</span><span class="p">:</span> <span class="s1">&#39;22PC</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">}</span>
         <span class="c1"># Override defaults using data calculated in from_fits_images</span>
         <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">ext_info</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">wcs_keywords</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1341,7 +1345,7 @@
         <span class="c1"># Override the defaults where necessary</span>
         <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CTYPE1&#39;</span><span class="p">,</span> <span class="s1">&#39;CTYPE2&#39;</span><span class="p">,</span> <span class="s1">&#39;CRPIX1&#39;</span><span class="p">,</span> <span class="s1">&#39;CRPIX2&#39;</span><span class="p">,</span> <span class="s1">&#39;CRVAL1&#39;</span><span class="p">,</span> <span class="s1">&#39;CRVAL2&#39;</span><span class="p">,</span> <span class="s1">&#39;CUNIT1&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;CUNIT2&#39;</span><span class="p">,</span> <span class="s1">&#39;CDELT1&#39;</span><span class="p">,</span> <span class="s1">&#39;CDELT2&#39;</span><span class="p">,</span> <span class="s1">&#39;PC1_1&#39;</span><span class="p">,</span> <span class="s1">&#39;PC1_2&#39;</span><span class="p">,</span> <span class="s1">&#39;PC2_1&#39;</span><span class="p">,</span> <span class="s1">&#39;PC2_2&#39;</span><span class="p">]:</span>
-                <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1">#override wcs keywords</span>
+                <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># override wcs keywords</span>
         <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXTNAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;APERTURE&#39;</span>
         <span class="k">return</span> <span class="n">hdu</span>
 
@@ -1372,7 +1376,7 @@
         <span class="c1"># these cadences from being used. They would break most methods!</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">quality_mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TIME&#39;</span><span class="p">])</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;TICID&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TICID&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1396,21 +1400,21 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;SECTOR&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;SECTOR&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;CAMERA&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CAMERA&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ccd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()[</span><span class="s1">&#39;CCD&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;CCD&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -1423,7 +1427,7 @@
         <span class="sd">&quot;&quot;&quot;Returns an AstroPy Time object for all good-quality cadences.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">btjd_to_astropy_time</span><span class="p">(</span><span class="n">btjd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">aperture_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="s1">&#39;pipeline&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">extract_aperture_photometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aperture_mask</span><span class="o">=</span><span class="s1">&#39;pipeline&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Performs aperture photometry.</span>
 
 <span class="sd">        Parameters</span>
@@ -1441,7 +1445,7 @@
         <span class="n">aperture_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_aperture_mask</span><span class="p">(</span><span class="n">aperture_mask</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">aperture_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Warning: aperture mask contains zero pixels.&#39;</span><span class="p">)</span>
-        <span class="n">centroid_col</span><span class="p">,</span> <span class="n">centroid_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">centroids</span><span class="p">(</span><span class="n">aperture_mask</span><span class="p">)</span>
+        <span class="n">centroid_col</span><span class="p">,</span> <span class="n">centroid_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_centroids</span><span class="p">(</span><span class="n">aperture_mask</span><span class="p">)</span>
         <span class="c1"># Ignore warnings related to zero or negative errors</span>
         <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
@@ -1456,7 +1460,7 @@
                 <span class="s1">&#39;cadenceno&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cadenceno</span><span class="p">,</span>
                 <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span>
                 <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">,</span>
-                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
                 <span class="s1">&#39;targetid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">TessLightCurve</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                               <span class="n">time_format</span><span class="o">=</span><span class="s1">&#39;btjd&#39;</span><span class="p">,</span>
@@ -1478,7 +1482,7 @@
                 <span class="s1">&#39;cadenceno&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cadenceno</span><span class="p">,</span>
                 <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span>
                 <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span><span class="p">,</span>
-                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdu</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">],</span>
                 <span class="s1">&#39;targetid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetid</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">TessLightCurve</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
                               <span class="n">time_format</span><span class="o">=</span><span class="s1">&#39;btjd&#39;</span><span class="p">,</span>
@@ -1520,7 +1524,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

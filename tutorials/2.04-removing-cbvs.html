@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to remove common systematics using basis vectors (CBVs) &mdash; lightkurve 1.0b19 documentation</title>
+  <title>How to remove common systematics using basis vectors (CBVs) &mdash; lightkurve 1.0b20 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                1.0b19
+                1.0b20
               </div>
             
           
@@ -109,6 +109,7 @@
 <p class="caption"><span class="caption-text">About lightkurve</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing and reporting issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing and acknowledging lightkurve</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../other_software.html">Other software</a></li>
 </ul>
@@ -371,7 +372,7 @@ lightcurves of common trends experience by all targets.</p>
 Kepler; <a class="reference external" href="https://en.wikipedia.org/wiki/KIC_8462852">Tabby’s star</a>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [1]:
+<span></span>In [4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -382,6 +383,7 @@ Kepler; <a class="reference external" href="https://en.wikipedia.org/wiki/KIC_84
 <span class="c1">#Remove nans and outliers</span>
 <span class="n">lc</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">remove_nans</span><span class="p">()</span>
 
+<span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="n">lc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -390,9 +392,8 @@ Kepler; <a class="reference external" href="https://en.wikipedia.org/wiki/KIC_84
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-Downloading URL https://mast.stsci.edu/api/v0/download/file?uri=mast:Kepler/url/missions/kepler/lightcurves/0084/008462852/kplr008462852-2011073133259_llc.fits to ./mastDownload/Kepler/kplr008462852_lc_Q111111111111111111/kplr008462852-2011073133259_llc.fits ... [Done]
-</pre></div></div>
+<img alt="../_images/tutorials_2.04-removing-cbvs_2_0.png" src="../_images/tutorials_2.04-removing-cbvs_2_0.png" />
+</div>
 </div>
 <p>The light curve above has a significant dip due to the astrophysical
 variability from Tabby’s star. However there are other long term trends
@@ -401,7 +402,7 @@ remove. We can use CBV’s to do this. Let’s import the CBV corrector from
 <code class="docutils literal notranslate"><span class="pre">lightkurve</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [2]:
+<span></span>In [5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -413,7 +414,7 @@ remove. We can use CBV’s to do this. Let’s import the CBV corrector from
 are going to remove. Let’s look at just the first 8 trends.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [3]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -432,7 +433,7 @@ are going to remove. Let’s look at just the first 8 trends.</p>
 Let’s pick just the first 5.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [4]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -444,7 +445,7 @@ Let’s pick just the first 5.</p>
 difference.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre>
-<span></span>In [5]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -506,7 +507,7 @@ left, the variability from spacecraft heating has been removed.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0b19',
+            VERSION:'1.0b20',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
